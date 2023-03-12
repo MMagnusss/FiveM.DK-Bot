@@ -1,0 +1,8 @@
+{
+  "token": "Bot_token",
+  "guildId": "Guild_id",
+  "clientId": "Bot_id",
+  "host": "localhost",
+  "user": "root",
+  "database": "bot"
+}
