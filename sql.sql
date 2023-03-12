@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `opgaver` (
   `opgaveid` int(11) NOT NULL AUTO_INCREMENT,
   `fuldført` longtext DEFAULT NULL,
   PRIMARY KEY (`opgaveid`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=957 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 -- Data exporting was unselected.
 
