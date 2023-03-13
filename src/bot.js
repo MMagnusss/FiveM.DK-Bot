@@ -22,19 +22,23 @@ client.connectDB = () => {
 }
 
 client.on("ready", () => {
-  loadCommands()
+  loadCommands();
+  loadSelectmenus();
   console.log("Botten er klar!")
 })
 
 client.on("interactionCreate", (interaction) => {
   if (interaction.isCommand()) {
     client.commands.get(interaction.commandName).execute(interaction, client).catch(console.error)
+  } else if (interaction.isStringSelectMenu()) {
+    client.selectmenus.get(interaction.customId).execute(interaction, client).catch(console.error)
   }
 })
 
 client.login(config.token)
 
 client.commands = new Collection();
+client.selectmenus = new Collection();
 client.commandArray = [];
 
 
@@ -56,4 +60,13 @@ const loadCommands = async () => {
     body: client.commandArray,
   }).catch(console.error);
   console.log(`Genindlæste kommandoer!`);
+}
+
+const loadSelectmenus = async () => {
+  const selectmenuFiles = fs.readdirSync(`./src/selectmenus`);
+  
+  selectmenuFiles.forEach((file) => {
+    const selectmenu = require(`./selectmenus/${file}`);
+    client.selectmenus.set(selectmenu.name, selectmenu);
+  })
 }

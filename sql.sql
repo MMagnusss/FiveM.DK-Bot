@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS `opgaver` (
   `forfaldsdato` longtext DEFAULT NULL,
   `opgaveid` int(11) NOT NULL AUTO_INCREMENT,
   `fuldført` longtext DEFAULT NULL,
+  `date` timestamp NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`opgaveid`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 

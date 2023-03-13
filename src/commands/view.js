@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js")
+const { SlashCommandBuilder, EmbedBuilder, ActionRow, ActionRowBuilder, StringSelectMenuBuilder } = require("discord.js")
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -24,20 +24,44 @@ module.exports = {
             { name: "Forfaldsdato", value: res[0].forfaldsdato.toString() },
             { name: "Opgave id", value: res[0].opgaveid.toString() },
             { name: "Fuldført", value: res[0].fuldført ? res[0].fuldført : "Nej" },
+            { name: "Tid oprettet", value: `<t:${Math.floor(res[0].date.getTime() / 1000)}:f>` }
           ])
         interaction.editReply({ embeds: [embed], ephemeral: true }).catch(console.error);
       })
     } else {
       const embed = new EmbedBuilder()
         .setTitle("Dine opgaver")
-        .setDescription("Her er en liste over dine opgaver\nSe flere detaljer om en opgave med **/view [id]**\n\n")
+        .setDescription("Her er en liste over dine opgaver\nSe flere detaljer om en opgave med **/view [id]**\n")
         .setColor("#226b2a")
       client.db.query("SELECT * FROM opgaver WHERE userid = ?", [interaction.user.id], (err, res, fields) => {
         res.forEach((opgave) => {
-          embed.data.description += `\n**Titel: **${opgave.titel} **Opgave id: **${opgave.opgaveid}`
+          embed.data.description += `\n\n**Titel: **${opgave.titel}\n**Opgave id: **${opgave.opgaveid}\n**Tid oprettet: **<t:${Math.floor(opgave?.date?.getTime() / 1000)}:f>`
         })
-        interaction.editReply({ embeds: [embed], ephemeral: true }).catch(console.error);
+        interaction.editReply({ embeds: [embed], components: [CreateSelectMenu()], ephemeral: true }).catch(console.error);
       })
     } 
   }
+}
+
+const CreateSelectMenu = () => {
+  const ActionRow = new ActionRowBuilder()
+  const SelectMenu = new StringSelectMenuBuilder()
+  .setCustomId("view")
+  .setPlaceholder("Klik her for at sortere")
+  .setMaxValues(1)
+  .setMinValues(1)
+  .setOptions([
+    {
+      label: "Sortér efter nyeste",
+      emoji: "⬆️",
+      value: "new",
+    },
+    {
+      label: "Sortér efter ældste",
+      emoji: "⬇️",
+      value: "old",
+    },
+  ])
+  ActionRow.addComponents(SelectMenu)
+  return ActionRow
 }

@@ -33,6 +33,7 @@ module.exports = {
           { name: "Beskrivelse", value: beskrivelse.toString() },
           { name: "Forfaldsdato", value: forfaldsdato.toString() },
           { name: "Opgave id", value: opgaveid.toString() },
+          { name: "Tid oprettet", value: `<t:${Math.floor(new Date().getTime() / 1000)}:f>` }
         ])
         .setColor("#226b2a")
       interaction.editReply({
